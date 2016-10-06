@@ -1,0 +1,16 @@
+;;
+;; Unit 1: Tutor Solution Model
+;; from the CMU ACT-R Tutorials
+;;
+
+(set-task "actr.tasks.tutorial.U1Tutor")
+
+(sgp :esc t :lf .05)
+
+(add-dm
+    ;; Add Chunks here    
+)
+
+;; Add productions here
+
+(goal-focus goal)
