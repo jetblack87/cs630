@@ -33,8 +33,10 @@
     (fact11 ISA addition-fact addend1 1 addend2 1 sum 2)
     ; (goal isa add-pair hun1 1 ten1 1 one1 1 hun2 1 ten2 1 one2 1)   
     
-    ; 115 + 115 = 230 - requires carry to the tens (NOT WORKING)
+    ; 115 + 115 = 230 - requires carry to the tens (WORKING)
     (fact55 ISA addition-fact addend1 5 addend2 5 sum 10)
+    (fact100 ISA addition-fact addend1 10 addend2 0 sum 10)
+    (3fact111 ISA addition-fact addend1 1 addend2 1 addend3 1 sum 1)
     ;(goal isa add-pair hun1 1 ten1 1 one1 5 hun2 1 ten2 1 one2 5)   
     
     ; 151 + 151 = 302 - requires carry to the hundreds (NOT WORKING)
