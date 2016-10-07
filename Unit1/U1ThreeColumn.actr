@@ -26,8 +26,19 @@
     (3fact194 ISA addition-fact addend1 1 addend2 9 addend3 4 sum 14)
     (3fact125 ISA addition-fact addend1 1 addend2 2 addend3 5 sum 8)
     
+    ; 296 + 547 = 843 - requires tens and hundreds carry (WORKING)
     (goal isa add-pair hun1 2 ten1 9 one1 6 hun2 5 ten2 4 one2 7)
-    ; 296 + 547 = 843 - requires tens and hundreds carry
+    
+    ; 111 + 111 = 222 - requires no carry (WORKING)
+    (fact11 ISA addition-fact addend1 1 addend2 1 sum 2)
+    ; (goal isa add-pair hun1 1 ten1 1 one1 1 hun2 1 ten2 1 one2 1)   
+    
+    ; 115 + 115 = 230 - requires carry to the tens (NOT WORKING)
+    (fact55 ISA addition-fact addend1 5 addend2 5 sum 10)
+    ;(goal isa add-pair hun1 1 ten1 1 one1 5 hun2 1 ten2 1 one2 5)   
+    
+    ; 151 + 151 = 302 - requires carry to the hundreds (NOT WORKING)
+    ;(goal isa add-pair hun1 1 ten1 5 one1 1 hun2 1 ten2 5 one2 1)       
 )
 
 
@@ -175,6 +186,38 @@
         sum        =sum
 )
 
+; ADD-TENS
+; IF the goal is to add a pair of numbers
+;  and the tens digits are available
+;  and you are busy computing the sum of the tens digits
+;  and the carry is nil
+;  and the sum of the tens digits has been retrieved
+; THEN set the carry to busy
+;  set the ten-ans to the sum
+;  and request a retrieval of 10 plus that sum.
+(p add-tens
+    =goal>
+        ISA          add-pair
+        ten1        =num1
+        ten2        =num2
+        carry        nil
+        ten-ans   busy
+    =retrieval>
+        ISA          addition-fact
+        addend1 =num1
+        addend2 =num2
+        sum         =sum
+==>
+    =goal>
+        ten-ans  =sum
+        carry        busy
+    +retrieval>
+        ISA           addition-fact
+        addend1  10
+        sum          =sum
+)
+
+
 ; PROCESS-TENS-CARRY
 ; IF the goal is to add a pair of numbers
 ;  and the hundreds digits are available
@@ -251,24 +294,24 @@
 ; THEN note that the carry is nil
 ;  and note you are busy computing the sum of the hundreds digits
 ;  and request a retrieval of the sum of the hundreds digits.
-    ;(p no-hundreds-carry
-    ;    =goal>
-    ;    ISA          add-pair
-    ;    hun1      =num1
-    ;    hun2      =num2
-    ;    ten-ans  =tens
-    ;    carry       =busy
-    ;    ?retrieval>
-    ;    state       error
-    ;    ==>
-    ;    =goal>
-    ;    carry       nil
-    ;    hun-ans  busy
-    ;    +retrieval>
-    ;    ISA          addition-fact
-    ;    addend1 =num1
-    ;    addend2 =num2
-    ;)
+(p no-hundreds-carry
+    =goal>
+        ISA          add-pair
+        hun1      =num1
+        hun2      =num2
+        ten-ans  =tens
+        carry       =busy
+    ?retrieval>
+        state       error
+==>
+    =goal>
+        carry       nil
+        hun-ans  busy
+    +retrieval>
+        ISA          addition-fact
+        addend1 =num1
+        addend2 =num2
+)
 
 ; ADD-HUNDREDS-CARRY
 ; IF the goal is to add a pair of numbers
