@@ -91,7 +91,7 @@
 ; THEN make the ones answer the remainder
 ;  and note that the carry is 1
 ;  and note you are busy computing the sum of the tens digits
-;  and request a retrieval of the sum of the tens digits.
+;  and request a retrieval of the sum of 1 and the tens digits.
 (p process-carry
     =goal>
         ISA            add-pair
@@ -144,37 +144,14 @@
         addend2 =num2
 )
 
-; ADD-TENS-DONE
-; IF the goal is to add a pair of numbers
-;  and you are busy computing the sum of the tens digits
-;  and the carry is nil
-;  and an addition-fact has been retrieved
-; THEN note the answer for the tens digits is the sum of that
-;  retrieved chunk.
-    ;(p add-tens-done
-    ;    =goal>
-    ;    ISA          add-pair
-    ;    one-ans   =ones
-    ;    ten-ans   busy
-    ;    carry        nil
-    ;    =retrieval>
-    ;    ISA          addition-fact
-    ;    sum         =sum
-    ;    ==>
-    ;    !output! (the answer is =sum =ones)
-    ;    =goal>
-    ;    ten-ans   =sum
-    ;    -goal>
-    ;)
-
 ; ADD-TENS-CARRY
 ; IF the goal is to add a pair of numbers
 ;  and the tens digits are available
 ;  and you are busy computing the sum of the tens digits
 ;  and the carry is 1
-;  and the sum of the tens digits has been retrieved
-; THEN set the carry to nil
-;  and request a retrieval of 1 plus that sum.
+;  and the sum of 1 and the tens digits has been retrieved
+; THEN set the carry to 1
+;  and request a retrieval of 10 plus that sum.
 (p add-tens-carry
     =goal>
         ISA         add-pair
@@ -198,19 +175,16 @@
         sum        =sum
 )
 
-
-
-
 ; PROCESS-TENS-CARRY
 ; IF the goal is to add a pair of numbers
 ;  and the hundreds digits are available
-;  and you are busy working on the carry
+;  and the carry is 1
 ;  and the ten-ans equals a value which a retrieval
 ;  finds is the sum of 10 plus a remainder
 ; THEN make the tens answer the remainder
 ;  and note that the carry is 1
 ;  and note you are busy computing the sum of the hundreds digits
-;  and request a retrieval of the sum of the hundreds digits.
+;  and request a retrieval of the sum of 1 and the hundreds digits.
 (p process-tens-carry
     =goal>
         ISA            add-pair
@@ -301,9 +275,9 @@
 ;  and the hundreds digits are available
 ;  and you are busy computing the sum of the hundreds digits
 ;  and the carry is 1
-;  and the sum of the hundreds digits has been retrieved
+;  and the sum of 1 and the hundreds digits has been retrieved
 ; THEN set the carry to nil
-;  and request a retrieval of 1 plus that sum.
+;  and request a retrieval of 1 and the hundreds digits
 (p add-hundreds-carry
     =goal>
         ISA         add-pair
@@ -333,7 +307,7 @@
 ;  and you are busy computing the sum of the hundreds digits
 ;  and the carry is nil
 ;  and an addition-fact has been retrieved
-; THEN note the answer for the tens digits is the sum of that
+; THEN note the answer for the hundreds digits is the sum of that
 ;  retrieved chunk.
 (p add-hundreds-done
     =goal>
