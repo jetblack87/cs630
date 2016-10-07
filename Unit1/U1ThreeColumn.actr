@@ -18,8 +18,18 @@
     (fact67 ISA addition-fact addend1 6 addend2 7 sum 13)
     (fact103 ISA addition-fact addend1 10 addend2 3 sum 13) 
     (fact17 ISA addition-fact addend1 1 addend2 7 sum 8)
-    (goal ISA add-pair one1 6  ten1 3 one2 7 ten2 4) 
+    
+    (fact94 ISA addition-fact addend1 9 addend2 4 sum 13)
+    (fact113 ISA addition-fact addend1 1 addend2 13 sum 14)
+    (fact104 ISA addition-fact addend1 10 addend2 4 sum 14)
+    
+    (3fact194 ISA addition-fact addend1 1 addend2 9 addend3 4 sum 14)
+    (3fact125 ISA addition-fact addend1 1 addend2 2 addend3 5 sum 8)
+    
+    (goal isa add-pair hun1 2 ten1 9 one1 6 hun2 5 ten2 4 one2 7)
+    ; 296 + 547 = 843 - requires tens and hundreds carry
 )
+
 
 ; START-PAIR
 ; IF the goal is to add a pair of numbers
@@ -101,8 +111,9 @@
         one-ans =remainder
     +retrieval>
         ISA           addition-fact
-        addend1   =num1
-        addend2   =num2
+        addend1   1
+        addend2   =num1
+        addend3   =num2
 )
 
 ; NO-CARRY
@@ -140,21 +151,21 @@
 ;  and an addition-fact has been retrieved
 ; THEN note the answer for the tens digits is the sum of that
 ;  retrieved chunk.
-(p add-tens-done
-    =goal>
-        ISA          add-pair
-        one-ans   =ones
-        ten-ans   busy
-        carry        nil
-    =retrieval>
-        ISA          addition-fact
-        sum         =sum
-==>
-    !output! (the answer is =sum =ones)
-    =goal>
-        ten-ans   =sum
-    -goal>
-)
+    ;(p add-tens-done
+    ;    =goal>
+    ;    ISA          add-pair
+    ;    one-ans   =ones
+    ;    ten-ans   busy
+    ;    carry        nil
+    ;    =retrieval>
+    ;    ISA          addition-fact
+    ;    sum         =sum
+    ;    ==>
+    ;    !output! (the answer is =sum =ones)
+    ;    =goal>
+    ;    ten-ans   =sum
+    ;    -goal>
+    ;)
 
 ; ADD-TENS-CARRY
 ; IF the goal is to add a pair of numbers
@@ -173,8 +184,138 @@
         ten-ans  busy
     =retrieval>
         ISA          addition-fact
-        addend1 =num1
-        addend2 =num2
+        addend1 1
+        addend2 =num1
+        addend3 =num2
+        sum        =sum
+==>
+    =goal>
+        carry      1
+        ten-ans =sum
+    +retrieval>
+        ISA          addition-fact
+        addend1 10
+        sum        =sum
+)
+
+
+
+
+; PROCESS-TENS-CARRY
+; IF the goal is to add a pair of numbers
+;  and the hundreds digits are available
+;  and you are busy working on the carry
+;  and the ten-ans equals a value which a retrieval
+;  finds is the sum of 10 plus a remainder
+; THEN make the tens answer the remainder
+;  and note that the carry is 1
+;  and note you are busy computing the sum of the hundreds digits
+;  and request a retrieval of the sum of the hundreds digits.
+(p process-tens-carry
+    =goal>
+        ISA            add-pair
+        hun1        =num1
+        hun2        =num2
+        carry         1
+        ten-ans    =tens
+    =retrieval>
+        ISA           addition-fact
+        addend1  10
+        sum          =tens
+        addend2  =remainder
+==>
+    =goal>
+        carry        1
+        hun-ans   busy
+        ten-ans    =remainder
+    +retrieval>
+        ISA           addition-fact
+        addend1   1
+        addend2   =num1
+        addend3   =num2
+)
+
+; PROCESS-HUNDREDS-CARRY
+; IF the goal is to add a pair of numbers
+;  and the hundreds digits are available
+;  and you are busy working on the carry
+;  and the ten-ans equals a value which a retrieval
+;  finds is the sum of 10 plus a remainder
+; THEN make the tens answer the remainder
+;  and note that the carry is 1
+;  and note you are busy computing the sum of the hundreds digits
+;  and request a retrieval of the sum of the hundreds digits.
+(p process-hundreds-carry
+    =goal>
+        ISA            add-pair
+        hun1        =num1
+        hun2        =num2
+        carry         busy
+        ten-ans    =tens
+    =retrieval>
+        ISA           addition-fact
+        addend1  10
+        sum          =tens
+        addend2  =remainder
+==>
+    =goal>
+        carry         1
+        hun-ans   busy
+        ten-ans =remainder
+    +retrieval>
+        ISA           addition-fact
+        addend1   =num1
+        addend2   =num2
+)
+
+; NO-HUNDREDS-CARRY
+; IF the goal is to add a pair of numbers
+;  and the hundreds digits are available
+;  and you are busy working on the carry
+;  and the ten-ans equals a sum
+;  and there has been a retrieval failure
+; THEN note that the carry is nil
+;  and note you are busy computing the sum of the hundreds digits
+;  and request a retrieval of the sum of the hundreds digits.
+    ;(p no-hundreds-carry
+    ;    =goal>
+    ;    ISA          add-pair
+    ;    hun1      =num1
+    ;    hun2      =num2
+    ;    ten-ans  =tens
+    ;    carry       =busy
+    ;    ?retrieval>
+    ;    state       error
+    ;    ==>
+    ;    =goal>
+    ;    carry       nil
+    ;    hun-ans  busy
+    ;    +retrieval>
+    ;    ISA          addition-fact
+    ;    addend1 =num1
+    ;    addend2 =num2
+    ;)
+
+; ADD-HUNDREDS-CARRY
+; IF the goal is to add a pair of numbers
+;  and the hundreds digits are available
+;  and you are busy computing the sum of the hundreds digits
+;  and the carry is 1
+;  and the sum of the hundreds digits has been retrieved
+; THEN set the carry to nil
+;  and request a retrieval of 1 plus that sum.
+(p add-hundreds-carry
+    =goal>
+        ISA         add-pair
+        hun1     =num1
+        hun2     =num2
+        carry      1
+        hun-ans  busy
+    =retrieval>
+        ISA          addition-fact
+        addend1 1
+        addend2 =num1
+        addend3 =num2
         sum        =sum
 ==>
     =goal>
@@ -182,7 +323,34 @@
     +retrieval>
         ISA          addition-fact
         addend1 1
-        addend2 =sum
+        addend2 =num1
+        addend3 =num2
 )
+
+
+; ADD-HUNDREDS-DONE
+; IF the goal is to add a pair of numbers
+;  and you are busy computing the sum of the hundreds digits
+;  and the carry is nil
+;  and an addition-fact has been retrieved
+; THEN note the answer for the tens digits is the sum of that
+;  retrieved chunk.
+(p add-hundreds-done
+    =goal>
+        ISA          add-pair
+        ten-ans   =tens
+        one-ans   =ones
+        hun-ans   busy
+        carry        nil
+    =retrieval>
+        ISA          addition-fact
+        sum         =sum
+==>
+    !output! (the answer is =sum =tens =ones)
+    =goal>
+        hun-ans   =sum
+    -goal>
+)
+
 
 (goal-focus goal)
