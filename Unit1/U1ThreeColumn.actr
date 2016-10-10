@@ -14,29 +14,29 @@
 (sgp :esc t :lf .05)
 
 (add-dm
-    (fact34 ISA addition-fact addend1 3 addend2 4 sum 7)
-    (fact67 ISA addition-fact addend1 6 addend2 7 sum 13)
-    (fact103 ISA addition-fact addend1 10 addend2 3 sum 13) 
-    (fact17 ISA addition-fact addend1 1 addend2 7 sum 8)
+    (fact34 ISA addition-fact addend1 3 addend2 4 addend3 0 sum 7)
+    (fact67 ISA addition-fact addend1 6 addend2 7 addend3 0 sum 13)
+    (fact103 ISA addition-fact addend1 10 addend2 3 addend3 0 sum 13) 
+    (fact17 ISA addition-fact addend1 1 addend2 7 addend3 0 sum 8)
     
-    (fact94 ISA addition-fact addend1 9 addend2 4 sum 13)
-    (fact113 ISA addition-fact addend1 1 addend2 13 sum 14)
-    (fact104 ISA addition-fact addend1 10 addend2 4 sum 14)
+    (fact94 ISA addition-fact addend1 9 addend2 4 addend3 0 sum 13)
+    (fact113 ISA addition-fact addend1 1 addend2 13 addend3 0 sum 14)
+    (fact104 ISA addition-fact addend1 10 addend2 4 addend3 0 sum 14)
     
-    (3fact194 ISA addition-fact addend1 1 addend2 9 addend3 4 sum 14)
-    (3fact125 ISA addition-fact addend1 1 addend2 2 addend3 5 sum 8)
+    (fact194 ISA addition-fact addend1 1 addend2 9 addend3 4 sum 14)
+    (fact125 ISA addition-fact addend1 1 addend2 2 addend3 5 sum 8)
     
     ; 296 + 547 = 843 - requires tens and hundreds carry (WORKING)
     (goal isa add-pair hun1 2 ten1 9 one1 6 hun2 5 ten2 4 one2 7)
     
     ; 111 + 111 = 222 - requires no carry (WORKING)
-    (fact11 ISA addition-fact addend1 1 addend2 1 sum 2)
+    ;(fact11 ISA addition-fact addend1 1 addend2 1 addend3 0 sum 2)
     ; (goal isa add-pair hun1 1 ten1 1 one1 1 hun2 1 ten2 1 one2 1)   
     
-    ; 115 + 115 = 230 - requires carry to the tens (WORKING)
-    (fact55 ISA addition-fact addend1 5 addend2 5 sum 10)
-    (fact100 ISA addition-fact addend1 10 addend2 0 sum 10)
-    (3fact111 ISA addition-fact addend1 1 addend2 1 addend3 1 sum 1)
+    ; 115 + 115 = 230 - requires carry to the tens (NOT WORKING)
+    ;(fact55 ISA addition-fact addend1 5 addend2 5 addend3 0 sum 10)
+    ;(fact100 ISA addition-fact addend1 10 addend2 0 addend3 0 sum 10)
+    ;(fact111 ISA addition-fact addend1 1 addend2 1 addend3 1 sum 3)
     ;(goal isa add-pair hun1 1 ten1 1 one1 5 hun2 1 ten2 1 one2 5)   
     
     ; 151 + 151 = 302 - requires carry to the hundreds (NOT WORKING)
@@ -64,6 +64,7 @@
         ISA           addition-fact
         addend1  =num1
         addend2  =num2
+        addend3 0
 )
 
 ; ADD-ONES
@@ -84,6 +85,7 @@
         ISA              addition-fact
         addend1    =num1
         addend2    =num2        
+        addend3    0
         sum            =sum
 ==>
     =goal>
@@ -117,6 +119,7 @@
         addend1  10
         sum          =ones
         addend2  =remainder
+        addend3  0
 ==>
     =goal>
         carry         1
@@ -155,6 +158,7 @@
         ISA          addition-fact
         addend1 =num1
         addend2 =num2
+        addend3 0
 )
 
 ; ADD-TENS-CARRY
@@ -208,6 +212,7 @@
         ISA          addition-fact
         addend1 =num1
         addend2 =num2
+        addend3 0
         sum         =sum
 ==>
     =goal>
@@ -242,6 +247,7 @@
         addend1  10
         sum          =tens
         addend2  =remainder
+        addend3  0
 ==>
     =goal>
         carry        1
@@ -276,6 +282,7 @@
         addend1  10
         sum          =tens
         addend2  =remainder
+        addend3  0
 ==>
     =goal>
         carry         1
@@ -285,6 +292,7 @@
         ISA           addition-fact
         addend1   =num1
         addend2   =num2
+        addend3   0
 )
 
 ; NO-HUNDREDS-CARRY
@@ -313,6 +321,7 @@
         ISA          addition-fact
         addend1 =num1
         addend2 =num2
+        addend3 0
 )
 
 ; ADD-HUNDREDS-CARRY
