@@ -1,0 +1,214 @@
+(set-task "cs630.U2AlphaArithmetic")
+
+(sgp
+    :v nil
+    :bll 0.5
+    :ans 0.5
+    :lf 0.4
+    :rt 0
+)
+
+(add-dm
+    (zero isa sequence identity "0" next "1")
+    (one isa sequence identity "1" next "2")
+    (two isa sequence identity "2" next "3")
+    (three isa sequence identity "3" next "4")
+    (four isa sequence identity "4" next "5")
+    
+    (a isa sequence identity "A" next "B")
+    (b isa sequence identity "B" next "C")
+    (c isa sequence identity "C" next "D")
+    (d isa sequence identity "D" next "E")
+    (e isa sequence identity "E" next "F")
+    (f isa sequence identity "F" next "G")
+    (g isa sequence identity "G" next "H")
+    (h isa sequence identity "H" next "I")
+    (i isa sequence identity "I" next "J")
+    (j isa sequence identity "J" next "K")
+    
+    (goal isa solve-problem)
+)
+(set-all-base-levels 10000)
+(goal-focus goal)
+
+;; Solve Problem
+
+(p start-problem
+    =goal>
+        isa solve-problem
+==>
+    +goal>
+        isa read-stimulus
+    +imaginal>
+        isa problem
+)
+
+;; Read Stimulus
+
+(p attend-next
+    =goal>
+        isa read-stimulus
+    =visual-location>
+        isa visual-location
+    ?visual>
+        state free
+==>
+    +goal>
+        isa read-stimulus
+    +visual>
+        isa move-attention
+        screen-pos =visual-location
+)
+
+(p read-letter
+    =goal>
+        isa read-stimulus
+    =imaginal>
+        letter nil
+    =visual>
+        isa text
+        value =value
+==>
+    =imaginal> 
+        letter =value
+    +visual-location>
+        isa visual-location
+        >= screen-x 150
+        <= screen-x 175
+)
+
+(p read-number
+    =goal>
+        isa read-stimulus
+    =imaginal>
+        - letter nil
+        number nil
+    =visual>
+        isa text
+        value =value
+==> 
+    =imaginal>
+        number =value
+    +visual-location>
+        isa visual-location
+        >= screen-x 200
+        <= screen-x 225
+)
+
+(p read-sum
+    =goal>
+        isa read-stimulus
+    =imaginal>
+        letter =letter
+        number =number
+        sum nil
+    =visual>
+        isa text
+        value =value
+==>
+    =imaginal>
+        sum =value
+        count "0"
+        result =letter
+    +goal>
+        isa count
+    +retrieval>
+        isa sequence
+        identity =letter
+)
+
+;; Count
+
+(p update-result
+    =goal>
+        isa count
+    =imaginal>
+        number =number
+        - count =number
+        count =count
+        result =result
+    =retrieval>
+        isa sequence
+        identity =result
+        next =next
+    ?vocal>
+        state free
+==>
+    +vocal>
+        isa subvocalize
+        string =next
+    =imaginal>
+        result =next
+    +retrieval>
+        isa sequence
+        identity =count
+)
+
+(p update-count
+    =goal>
+        isa count
+    =imaginal>
+        count =count
+        result =result
+    =retrieval>
+        isa sequence
+        identity =count
+        next =next
+==>
+    =imaginal>
+        count =next
+    +retrieval>
+        isa sequence
+        identity =result
+)
+
+(p done-counting
+    =goal>
+        isa count
+    =imaginal>
+        number =number
+        count =number
+==>
+    =imaginal>
+    -retrieval>
+    +goal>
+        isa respond
+)
+
+;; Respond
+
+(p respond-yes
+    =goal>
+        isa respond
+    =imaginal>
+        sum =sum
+        result =sum
+    ?manual>
+        state free
+==>
+    +manual>
+        isa press-key
+        key "k"
+    -imaginal>
+    +goal>
+        isa solve-problem
+)
+
+(p respond-no
+    =goal>
+        isa respond
+    =imaginal>
+        sum =sum
+        - result =sum
+    ?vocal>
+        state free
+    ?manual>
+        state free
+==>
+    +manual>
+        isa press-key
+        key "d"        
+    -imaginal>
+    +goal>
+        isa solve-problem
+)
