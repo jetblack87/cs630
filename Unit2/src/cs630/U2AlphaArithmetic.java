@@ -102,7 +102,8 @@ public class U2AlphaArithmetic extends Task {
 	// Analysis Code
 
 	private double humanRT[][] = { { 1.84, 2.46, 2.82 }, { 1.21, 1.45, 1.42 }, { 1.14, 1.21, 1.17 } };
-
+	private double origModelRT[][] = {{1.201, 1.461, 1.749}, {1.158, 1.436, 1.722}, {1.171, 1.443, 1.738}};
+	
 	public int analysisIterations() {
 		return 100;
 	}
@@ -145,14 +146,33 @@ public class U2AlphaArithmetic extends Task {
 
 			getModel().output("\nHuman");
 			printTable(humanRT);
-
+			
+			getModel().output("\nOriginal Model");
+			printTable(origModelRT);
+			
 			getModel().output("\nModel");
 			printTable(modelRT);
+			
+			double humanVsThisModel[][] = compareTable(humanRT, modelRT);
+			getModel().output("\nHuman vs. This Model");
+			printTable(humanVsThisModel);
+
+			double origModelVsThisModel[][] = compareTable(origModelRT, modelRT);
+			getModel().output("\nOriginal Model vs. This Model");
+			printTable(origModelVsThisModel);
 
 			getModel().output(String.format("\nR = %.2f", Statistics.correlation(modelRT, humanRT)));
 			getModel().output(String.format("\nRMSE = %.2f", Statistics.rmse(modelRT, humanRT)));
 		}
 
 		return result;
+	}
+
+	private double[][] compareTable(double[][] oneRT, double[][] twoRT) {
+		double returnTable[][] = new double[3][3];
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
+				returnTable[i][j] =  twoRT[i][j] - oneRT[i][j];
+		return returnTable;
 	}
 }

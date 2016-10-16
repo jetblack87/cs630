@@ -1,11 +1,18 @@
+;;
+;; Mark Albrecht
+;; mwa29@drexel.edu
+;; CS630, Assignment 2
+;;
+
 (set-task "cs630.U2AlphaArithmetic")
 
 (sgp
-    :v nil
+    :v t ; [MWA]
     :bll 0.5
     :ans 0.5
     :lf 0.4
     :rt 0
+    :act nil ; [MWA]
 )
 
 (add-dm
@@ -108,13 +115,15 @@
 ==>
     =imaginal>
         sum =value
-        count "0"
+        ; count "0" ; [MWA]
         result =letter
     +goal>
-        isa count
-    +retrieval>
-        isa sequence
-        identity =letter
+        ; isa count [MWA]
+        isa recall ; [MWA]
+    +retrieval> ; [MWA]
+        isa problem
+        letter =letter
+        number =number
 )
 
 ;; Count
@@ -211,4 +220,46 @@
     -imaginal>
     +goal>
         isa solve-problem
+)
+
+
+; Unit 2 [MWA]
+
+(p recall
+    =goal>
+        isa recall
+    =imaginal>
+        sum =sum
+        result =result
+    =retrieval>
+        isa problem
+        letter =letter
+        result =recall_result
+==>
+    !output! (result =ans)
+    +goal>
+        isa respond
+    =imaginal>
+        sum =sum
+        result =recall_result
+)
+
+(p cannot-recall
+    =goal>
+        isa recall
+    ?retrieval>
+        state   error        
+    =imaginal>
+        letter =letter
+        sum =sum
+==>
+    =imaginal>
+        sum =sum
+        count "0"
+        result =letter
+    +goal>
+        isa count
+    +retrieval>
+        isa sequence
+        identity =letter
 )
