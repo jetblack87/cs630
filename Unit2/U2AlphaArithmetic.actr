@@ -7,12 +7,18 @@
 (set-task "cs630.U2AlphaArithmetic")
 
 (sgp
-    :v t ; [MWA]
+    ; :v t ; [MWA]
     :bll 0.5
     :ans 0.5
-    :lf 0.4
-    :rt 0
-    :act nil ; [MWA]
+    ; :lf 0.05 [MWA]
+    ; :rt 0     [MWA]
+    ; :lf 0.22 :rt -1.5 ; [MWA] R 0.96 RMSE 0.26
+    ; :lf 0.22 :rt -1.0 ; [MWA] R 0.97 RMSE 0.36
+    :lf 0.22 :rt -1.1 ; [MWA] R 0.99 RMSE 0.33
+    ; :lf 0.30 :rt -1.1 ; [MWA] R 0.97 RMSE 0.30
+    ; :lf 0.25 :rt -1.5 ; [MWA] R 0.96 RMSE 0.24
+    ; :lf 0.25 :rt -1.7 ; [MWA] R 0.96 RMSE 0.19
+    ; :lf 0.18 :rt -1.5 ; [MWA] R 0.96 RMSE 0.31
 )
 
 (add-dm
@@ -120,6 +126,9 @@
     +goal>
         ; isa count [MWA]
         isa recall ; [MWA]
+        ;    +retrieval> [MWA]
+        ;        isa sequence
+        ;        identity =letter
     +retrieval> ; [MWA]
         isa problem
         letter =letter
@@ -236,7 +245,6 @@
         letter =letter
         result =recall_result
 ==>
-    !output! (result =ans)
     +goal>
         isa respond
     =imaginal>
