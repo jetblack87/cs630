@@ -1,0 +1,32 @@
+(set-task "cs630.U3Choice")
+
+(sgp 
+    :v t ;; verbose trace: t or nil
+    :bll .5 ;; base-level learning: 0.5 or nil
+    :epl t ;; enable production learning (compilation): t or nil
+    :pct t ;; production compilation trace: t or nil
+    :egs 0.1 ;; expected gain noise
+    :ul t ;; utility learning: t or nil
+    :iu 10 ;; initial utility of original rules
+    :nu 0 ;; new utility of newly learned rules
+    :alpha 0.2 ;; alpha learning rate
+)
+
+(add-dm
+    
+    ;; instruction chunks, assumed to have been memorized
+    (i1 isa instruction action read previous start)
+    (i2 isa instruction action respond condition "O--" hand right finger index previous i1)
+    (i3 isa instruction action respond condition "-O-" hand right finger middle previous i2)
+    (i4 isa instruction action respond condition "--O" hand right finger ring previous i3)
+    (i5 isa instruction action repeat previous i4)
+    
+    ;; goal is to follow instructions recalled one at a time
+    (goal isa follow-instructions)
+)
+
+(set-all-base-levels 5) ;; boost base levels of instruction chunks
+(goal-focus goal)
+
+
+;; instruction-following production rules go here
