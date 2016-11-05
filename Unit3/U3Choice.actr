@@ -119,10 +119,12 @@
         finger =finger
     =imaginal>
         stimulus =condition
+    ?manual>
+        state    free
 ==>
     =imaginal>
     +manual>
-        isa peck-recoil
+        isa punch
         hand =hand
         finger =finger
     =goal>
