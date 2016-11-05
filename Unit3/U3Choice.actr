@@ -71,6 +71,7 @@
         screen-pos =visual-location
     =goal>
         step attending
+        state =retrieval
 )
 
 (p encode-stimulus
