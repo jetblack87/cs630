@@ -1,9 +1,16 @@
+;;
+;; Mark Albrecht
+;; mwa29@drexel.edu
+;; CS630, Assignment 3
+;;
+
 (set-task "cs630.U3Choice")
 
 (sgp 
     :v t ;; verbose trace: t or nil
     :bll .5 ;; base-level learning: 0.5 or nil
-    :epl t ;; enable production learning (compilation): t or nil
+    ;    :epl t ;; enable production learning (compilation): t or nil
+    :epl nil ; [MWA]
     :pct t ;; production compilation trace: t or nil
     :egs 0.1 ;; expected gain noise
     :ul t ;; utility learning: t or nil
@@ -22,7 +29,8 @@
     (i5 isa instruction action repeat previous i4)
     
     ;; goal is to follow instructions recalled one at a time
-    (goal isa follow-instructions)
+    ;    (goal isa follow-instructions step ready)
+    (goal isa follow-instructions state start step ready) ; [MWA] Added 'state start step ready'
 )
 
 (set-all-base-levels 5) ;; boost base levels of instruction chunks
@@ -30,3 +38,54 @@
 
 
 ;; instruction-following production rules go here
+(p retrieve-instruction
+    =goal>          	 
+        isa follow-instructions
+        state =state ; matches action
+        step ready
+==>
+    +retrieval>
+        isa instruction
+        previous =state
+    =goal>
+        step retrieving-instruction        
+)
+
+(p read-stimulus
+    =goal>
+        isa follow-instructions
+        step retrieving-instruction
+    =retrieval>
+        isa instruction
+        action read
+    =visual-location>
+        isa visual-location
+    ?visual>
+        state free
+==>
+    +imaginal>
+        isa args
+        arg1 fill
+    +visual>
+        isa move-attention
+        screen-pos =visual-location
+    =goal>
+        step attending
+)
+
+(p encode-stimulus
+    =goal>
+        isa follow-instructions
+        step attending
+    =visual>
+        isa text
+        value =val
+    =imaginal>
+        isa args
+        arg1 fill
+==>
+    =imaginal>
+        stimulus =val
+    =goal>
+        step ready
+)
