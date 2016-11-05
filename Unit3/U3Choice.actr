@@ -41,9 +41,25 @@
 (p retrieve-instruction
     =goal>          	 
         isa follow-instructions
-        state =state ; matches action
+        state =state
         step ready
 ==>
+    +retrieval>
+        isa instruction
+        previous =state
+    =goal>
+        step retrieving-instruction        
+)
+
+(p retrieve-instruction-imaginal
+    =goal>          	 
+        isa follow-instructions
+        state =state
+        step ready
+    =imaginal>
+        stimulus =condition
+==>
+    =imaginal>
     +retrieval>
         isa instruction
         previous =state
@@ -89,4 +105,46 @@
         stimulus =val
     =goal>
         step ready
+)
+
+(p retrieved-correct-instruction
+    =goal>
+        isa follow-instructions
+        step retrieving-instruction
+    =retrieval>
+        isa instruction
+        action respond
+        condition =condition
+        hand =hand
+        finger =finger
+    =imaginal>
+        stimulus =condition
+==>
+    =imaginal>
+    +manual>
+        isa peck-recoil
+        hand =hand
+        finger =finger
+    =goal>
+        state    =retrieval
+        step     ready
+)
+
+(p retrieved-incorrect-instruction
+    =goal>
+        isa follow-instructions
+        step retrieving-instruction
+    =retrieval>
+        isa instruction
+        action respond
+        condition =condition
+        hand =hand
+        finger =finger
+    =imaginal>
+        - stimulus =condition
+==>
+    =imaginal>
+    =goal>
+        state    =retrieval
+        step     ready
 )
