@@ -150,3 +150,17 @@
         state    =retrieval
         step     ready
 )
+
+(p complete
+    =goal>
+        isa follow-instructions
+        step retrieving-instruction
+    =retrieval>
+        isa instruction
+        action repeat
+==>
+    +goal>
+        isa follow-instructions
+        state start
+        step ready
+)
