@@ -9,14 +9,16 @@
 (sgp 
     :v t ;; verbose trace: t or nil
     :bll .5 ;; base-level learning: 0.5 or nil
-    ;    :epl t ;; enable production learning (compilation): t or nil
-    :epl nil ; [MWA]
+    :epl t ;; enable production learning (compilation): t or nil
     :pct t ;; production compilation trace: t or nil
     :egs 0.1 ;; expected gain noise
     :ul t ;; utility learning: t or nil
     :iu 10 ;; initial utility of original rules
     :nu 0 ;; new utility of newly learned rules
-    :alpha 0.2 ;; alpha learning rate
+    ; :alpha 0.2 ;; alpha learning rate
+    :alpha 1.0 ; [MWA]
+    :lf .6 ; [MWA]
+    :rt 0 ; [MWA]
 )
 
 (add-dm
@@ -164,3 +166,5 @@
         state start
         step ready
 )
+
+(spp complete :reward 20)
