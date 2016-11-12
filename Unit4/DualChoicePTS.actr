@@ -1,0 +1,27 @@
+;;
+;; Mark Albrecht
+;; mwa29@drexel.edu
+;; CS630, Assignment 4
+;;
+
+(set-task "actr.tasks.tutorial.DualChoicePRP")
+
+(sgp
+    :v t ;; verbose trace: t or nil
+    :tone-recode-delay 0.13
+    :motor-feature-prep-time 0
+)
+
+(add-dm
+    (goal isa aural-vocal)
+)
+
+(goal-focus goal)
+
+;; Visual-Manual Task
+
+
+
+;; Aural-Vocal Task
+
+
