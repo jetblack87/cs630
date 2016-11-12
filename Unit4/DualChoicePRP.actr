@@ -13,14 +13,72 @@
 )
 
 (add-dm
-    (goal isa aural-vocal)
+    (vis_left isa instruction condition "O--" hand right finger index)
+    (vis_middle isa instruction condition "-O-" hand right finger middle)
+    (vis_right isa instruction condition "--O" hand right finger ring)
+    
+    (aud_low isa instruction condition "low" aural "one")
+    (aud_mid isa instruction condition "mid" aural "two")
+    (aud_high isa instruction condition "high" aural "three")
+    
+    (goal isa aural-vocal)    
 )
 
 (goal-focus goal)
 
 ;; Visual-Manual Task
 
+(p read-stimulus
+    =goal>
+        isa visual-manual
+    =visual-location>
+        isa visual-location
+    ?visual>
+        state free
+==>
+    +imaginal>
+        isa args
+        arg1 fill
+    +visual>
+        isa move-attention
+        screen-pos =visual-location
+    =goal>
+        step attending
+)
 
+(p encode-stimulus
+    =goal>
+        isa visual-manual
+        step attending
+    =visual>
+        isa text
+        value =val
+    =imaginal>
+        isa args
+        arg1 fill
+==>
+    +retrieval>
+        condition =val
+    =goal>
+        step ready
+)
+
+(p retrieved-visual-instruction
+    =goal>
+        isa visual-manual
+    =retrieval>
+        isa instruction
+        condition =condition
+        hand =hand
+        finger =finger
+    ?manual>
+        state    free
+==>
+    +manual>
+        isa punch
+        hand =hand
+        finger =finger
+)
 
 ;; Aural-Vocal Task
 
