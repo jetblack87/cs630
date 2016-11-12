@@ -13,13 +13,13 @@
 )
 
 (add-dm
-    (vis_left isa instruction condition "O--" hand right finger index)
-    (vis_middle isa instruction condition "-O-" hand right finger middle)
-    (vis_right isa instruction condition "--O" hand right finger ring)
+    (visual_left isa instruction condition "O--" hand right finger index)
+    (visual_middle isa instruction condition "-O-" hand right finger middle)
+    (visual_right isa instruction condition "--O" hand right finger ring)
     
-    (aud_low isa instruction condition "low" aural "one")
-    (aud_mid isa instruction condition "mid" aural "two")
-    (aud_high isa instruction condition "high" aural "three")
+    (aural_low isa instruction condition low word "one")
+    (aural_mid isa instruction condition mid word "two")
+    (aural_high isa instruction condition high word "three")
     
     (goal isa aural-vocal)    
 )
@@ -36,9 +36,6 @@
     ?visual>
         state free
 ==>
-    +imaginal>
-        isa args
-        arg1 fill
     +visual>
         isa move-attention
         screen-pos =visual-location
@@ -46,16 +43,13 @@
         step attending
 )
 
-(p encode-stimulus
+(p encode-visual-stimulus
     =goal>
         isa visual-manual
         step attending
     =visual>
         isa text
         value =val
-    =imaginal>
-        isa args
-        arg1 fill
 ==>
     +retrieval>
         condition =val
@@ -78,8 +72,56 @@
         isa punch
         hand =hand
         finger =finger
+    =goal>
+        isa aural-vocal
 )
 
 ;; Aural-Vocal Task
+
+(p hear-stimulus
+    =goal>
+        isa aural-vocal
+    =aural-location>
+        isa audio-event
+    ?aural>
+        state free
+==>
+    +aural>
+        isa sound
+        event =aural-location
+    =goal>
+        step attending
+)
+
+(p encode-aural-stimulus
+    =goal>
+        isa aural-vocal
+        step attending
+    =aural>
+        isa tone
+        content =content
+==>
+    +retrieval>
+        condition =content
+    =goal>
+        step ready
+)
+
+(p retrieved-aural-instruction
+    =goal>
+        isa aural-vocal
+    =retrieval>
+        isa instruction
+        condition =condition
+        word =word
+    ?vocal>
+        state    free
+==>
+    +vocal>
+        isa speak
+        string =word
+    =goal>
+        isa visual-manual
+)
 
 
