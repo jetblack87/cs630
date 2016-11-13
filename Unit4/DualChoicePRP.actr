@@ -10,6 +10,7 @@
     :v t ;; verbose trace: t or nil
     :tone-recode-delay 0.13
     :motor-feature-prep-time 0
+    :lf .02 ; [MWA]
 )
 
 (add-dm
