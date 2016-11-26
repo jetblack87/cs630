@@ -4,7 +4,7 @@
 ;; CS630, Assignment 4
 ;;
 
-(set-task "actr.tasks.tutorial.DualChoicePRP")
+(set-task "actr.tasks.tutorial.DualChoicePTS")
 
 (sgp
     :v t ;; verbose trace: t or nil
@@ -22,10 +22,12 @@
     (aural_mid isa instruction condition mid word "two")
     (aural_high isa instruction condition high word "three")
     
-    (goal isa aural-vocal)    
+    (goal-aural-vocal isa aural-vocal)
+    (goal-visual-manual isa visual-manual)
 )
 
-(goal-focus goal)
+(goal-focus goal-aural-vocal)
+(goal-focus goal-visual-manual)
 
 ;; Visual-Manual Task
 
@@ -73,8 +75,6 @@
         isa punch
         hand =hand
         finger =finger
-    =goal>
-        isa aural-vocal
 )
 
 ;; Aural-Vocal Task
@@ -121,8 +121,6 @@
     +vocal>
         isa speak
         string =word
-    =goal>
-        isa visual-manual
 )
 
 
